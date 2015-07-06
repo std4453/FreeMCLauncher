@@ -55,7 +55,7 @@ public class DownloaderAutoRetry {
 			checkAvailabilityAndGetLength();
 		} while (!available && retries < 10);
 
-		System.out.println("Size=" + length);
+		// System.out.println("Size=" + length);
 
 		new Thread(new Runnable() {
 			@Override
@@ -128,7 +128,7 @@ public class DownloaderAutoRetry {
 					lastTime = time;
 				}
 
-				System.out.println(downloaded);
+				// System.out.println(downloaded);
 			}
 		} catch (IOException e) {
 			if ((e instanceof SocketException)
