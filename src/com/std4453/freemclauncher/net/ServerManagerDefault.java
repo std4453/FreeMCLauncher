@@ -32,7 +32,7 @@ public class ServerManagerDefault implements IServerManager {
 		case ASSETS_SERVER:
 			return "http://resources.download.minecraft.net/";
 		case LIBRARIES_SERVER:
-			return "http://libraries.minecraft.net/";
+			return "https://libraries.minecraft.net/";
 		case MINECRAFT_DOWNLOAD_SERVER:
 			return "http://s3.amazonaws.com/Minecraft.Download/";
 		case VERSION_INDEX_SERVER:

@@ -24,13 +24,15 @@ public class SystemFilterRule {
 
 		if (this.name == null)
 			return actionBoolean;
-		
+
 		String osName = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		
-		if (this.version==null&&osName.toLowerCase().equals(name.toLowerCase()));
 
-		if (osName.toLowerCase().equals(name.toLowerCase())
+		if (this.version == null
+				&& osName.toLowerCase().indexOf(name.toLowerCase()) != -1)
+			return actionBoolean;
+
+		if (osName.toLowerCase().indexOf(name.toLowerCase()) != -1
 				&& Pattern.matches(version, osVersion))
 			return actionBoolean;
 
