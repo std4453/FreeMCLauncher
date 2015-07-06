@@ -44,8 +44,8 @@ public class LazyFileOutputStream extends OutputStream {
 
 	@Override
 	public void close() throws IOException {
-		ensureStreamExists();
-		stream.close();
+		if (stream != null)
+			stream.close();
 	}
 
 	private void ensureStreamExists() {

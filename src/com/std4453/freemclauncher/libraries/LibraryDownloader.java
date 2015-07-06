@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.std4453.freemclauncher.files.DirectoryHelper;
-import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.net.IServerManager;
 import com.std4453.freemclauncher.net.Server;
 import com.std4453.freemclauncher.net.ServerManagerFactory;
@@ -18,22 +17,12 @@ public class LibraryDownloader {
 	public LibraryDownloader() {
 	}
 
-	public Object[] getLibraryDownloadEntries(Library library) {
+	public Object[] getLibraryDownloadEntry(Library library) {
 		String libraryPath = library.path;
 		String libraryNatives = library.natives;
 
-		Map<String, String> data = new HashMap<String, String>();
-		data.put("libraryPath", libraryPath);
 		IServerManager serverManager = ServerManagerFactory.getServerManager();
-		String libraryUrl = serverManager.getDownloadURL(
-				Server.LIBRARIES_SERVER, data);
-		File libraryFile = new File(DirectoryHelper.libraries, libraryPath);
-		if (libraryFile.exists()) {
-			libraryUrl = null;
-			libraryFile = null;
-		}
-		OutputStream libraryOutputStream = new LazyFileOutputStream(libraryFile);
-
+		Map<String, String> data = new HashMap<String, String>();
 		if (libraryNatives != null) {
 			data.put("libraryPath", libraryNatives);
 			String libraryNativesUrl = serverManager.getDownloadURL(
@@ -48,11 +37,21 @@ public class LibraryDownloader {
 			OutputStream libraryNativesOutputStream = new LazyFileOutputStream(
 					libraryNativesFile);
 
-			return new Object[] { libraryUrl, libraryOutputStream,
-					libraryNativesUrl, libraryNativesOutputStream };
-		}
+			return new Object[] { libraryNativesUrl, libraryNativesOutputStream };
+		} else {
+			data.put("libraryPath", libraryPath);
+			String libraryUrl = serverManager.getDownloadURL(
+					Server.LIBRARIES_SERVER, data);
+			File libraryFile = new File(DirectoryHelper.libraries, libraryPath);
+			if (libraryFile.exists()) {
+				libraryUrl = null;
+				libraryFile = null;
+			}
+			OutputStream libraryOutputStream = new LazyFileOutputStream(
+					libraryFile);
 
-		return new Object[] { libraryUrl, libraryOutputStream };
+			return new Object[] { libraryUrl, libraryOutputStream };
+		}
 	}
 
 	public Map<String, OutputStream> getLibrariesDownloadMapping(Version version) {
@@ -61,28 +60,16 @@ public class LibraryDownloader {
 		List<Library> libraries = new LibraryIndexer()
 				.getLibrariesOfVersion(version.getVersionName());
 
-		Object[] libraryEntries;
+		Object[] libraryEntry;
 
 		for (Library library : libraries) {
-			libraryEntries = getLibraryDownloadEntries(library);
+			libraryEntry = getLibraryDownloadEntry(library);
 
-			putEntries(mapping, libraryEntries);
+			if (libraryEntry[0] != null)
+				mapping.put((String) libraryEntry[0],
+						(OutputStream) libraryEntry[1]);
 		}
 
 		return mapping;
-	}
-
-	protected void putEntries(Map<String, OutputStream> mapping,
-			Object[] entries) {
-		String url=null;
-		for (int i = 0; i < entries.length; ++i) {
-			if (entries[i] == null)
-				continue;
-			if (i % 2 == 0)
-				url = (String) entries[i];
-			else {
-				mapping.put(url, (OutputStream) entries[i]);
-			}
-		}
 	}
 }
