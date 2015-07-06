@@ -1,0 +1,13 @@
+About - FreeMCLauncher
+
+Introduction
+
+I don't know whether it is good to write such a article in what sounds like
+an usage. But I think that I should explain why I came to the idea of building
+this Minecraft launcher.
+So just a few years earlier, I got to know a very interesting and famous game
+called Minecraft, and got attracted by it very shortly afterwards. As anyone has
+discovered, the first thing you do before you can play a Minecraft game is start
+your launcher.
+
+#TO BE FINISHED#
