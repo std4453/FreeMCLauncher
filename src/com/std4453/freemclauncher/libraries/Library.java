@@ -18,13 +18,14 @@ public class Library {
 
 		StructuredDataArray rules = data.getStructuredDataArray("rules");
 		this.rules = new Vector<SystemFilterRule>();
-		for (Object object : rules) {
-			if (object instanceof StructuredDataObject)
-				this.rules.add(new SystemFilterRule(
-						(StructuredDataObject) object));
-			else
-				continue;
-		}
+		if (rules != null)
+			for (Object object : rules) {
+				if (object instanceof StructuredDataObject)
+					this.rules.add(new SystemFilterRule(
+							(StructuredDataObject) object));
+				else
+					continue;
+			}
 
 		StructuredDataObject natives = data.getStructuredDataObject("natives");
 		if (natives == null)
