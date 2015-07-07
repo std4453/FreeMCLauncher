@@ -30,6 +30,7 @@ public class Library {
 		StructuredDataObject natives = data.getStructuredDataObject("natives");
 		if (natives == null)
 			return;
+		this.natives="";
 
 		String platformString = natives.getString(SystemNameHelper
 				.getSystemName());

@@ -83,7 +83,7 @@ public class DownloaderMultiple {
 		progressBar = new JProgressBar();
 		panel.add(progressBar, BorderLayout.CENTER);
 
-		lblNewLabel = new JLabel("New label");
+		lblNewLabel = new JLabel("Preparing download");
 		panel.add(lblNewLabel, BorderLayout.NORTH);
 
 		progressBar.setMaximum(100);
@@ -108,15 +108,15 @@ public class DownloaderMultiple {
 		for (Map.Entry<String, OutputStream> entry : this.mapping.entrySet()) {
 			this.url = entry.getKey();
 			if (url.indexOf('|') != -1)
-				this.url = url.substring(url.indexOf('|')+1);
+				this.url = url.substring(url.indexOf('|') + 1);
 			this.os = entry.getValue();
 
 			DownloaderMultipleDownloader downloader = new DownloaderMultipleDownloader(
 					this);
 			downloader.run();
-			
+
 			++count;
-			
+
 			frame.setTitle("ÏÂÔØÎÄ¼þ£º" + count + "/" + this.mapping.size());
 		}
 	}

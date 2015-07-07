@@ -21,9 +21,14 @@ public class LibraryDownloader {
 		String libraryPath = library.path;
 		String libraryNatives = library.natives;
 
+		if (!library.passed())
+			return new Object[] { null, null };
+
 		IServerManager serverManager = ServerManagerFactory.getServerManager();
 		Map<String, String> data = new HashMap<String, String>();
 		if (libraryNatives != null) {
+			if (libraryNatives.isEmpty())
+				return new Object[] { null, null };
 			data.put("libraryPath", libraryNatives);
 			String libraryNativesUrl = serverManager.getDownloadURL(
 					Server.LIBRARIES_SERVER, data);
