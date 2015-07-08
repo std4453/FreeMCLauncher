@@ -84,7 +84,7 @@ public class Launcher {
 		String memory = "512M";
 
 		// TODO:extract natives
-		Process process = new ProcessBuilder(String.format(
+		Process process = new ProcessBuilder("cmd","/c", String.format(
 				"java -Xms%s -cp %s %s %s", memory, cp, mainClass, args))
 				.redirectErrorStream(true).start();
 		InputStream out = process.getInputStream();
@@ -103,7 +103,7 @@ public class Launcher {
 		List<Profile> profiles = scanner.getProfiles();
 		Profile profile = null;
 		for (Profile profile1 : profiles)
-			if (profile1.getName().equals("1.5.2"))
+			if (profile1.getName().equals("1.7.3"))
 				profile = profile1;
 
 		new Launcher().launchNoCheck(profile);
