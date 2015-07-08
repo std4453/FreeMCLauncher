@@ -18,7 +18,7 @@ public class AuthenticatorOffline implements IAuthenticator{
 
 	@Override
 	public String getUserProperties() {
-		return null;
+		return "{}";
 	}
 
 	@Override

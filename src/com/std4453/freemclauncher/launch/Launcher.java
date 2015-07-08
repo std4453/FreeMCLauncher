@@ -81,7 +81,7 @@ public class Launcher {
 		String mainClass = MainClassHelper.getMinecraftMainClass(profile);
 
 		// TODO:calculate memory
-		String memory = "512M";
+		String memory = "128M";
 
 		// TODO:extract natives
 		Process process = new ProcessBuilder("cmd","/c", String.format(
