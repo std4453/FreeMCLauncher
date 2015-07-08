@@ -83,10 +83,13 @@ public class Launcher {
 		// TODO:calculate memory
 		String memory = "128M";
 
-		// TODO:extract natives
-		Process process = new ProcessBuilder("cmd","/c", String.format(
-				"java -Xms%s -cp %s %s %s", memory, cp, mainClass, args))
-				.redirectErrorStream(true).start();
+		NativesExtracter extracter = new NativesExtracter();
+		String nativesDir = extracter.extractNativesForProfile(profile);
+		System.out.println(nativesDir);
+
+		Process process = new ProcessBuilder("cmd", "/c", String.format(
+				"java -Djava.library.path=%s -Xms%s -cp %s %s %s", nativesDir,
+				memory, cp, mainClass, args)).redirectErrorStream(true).start();
 		InputStream out = process.getInputStream();
 		Scanner scanner = new Scanner(out);
 		while (scanner.hasNextLine())
