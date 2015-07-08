@@ -11,7 +11,6 @@ import com.std4453.freemclauncher.net.IServerManager;
 import com.std4453.freemclauncher.net.Server;
 import com.std4453.freemclauncher.net.ServerManagerFactory;
 import com.std4453.freemclauncher.util.LazyFileOutputStream;
-import com.std4453.freemclauncher.versions.Version;
 
 public class LibraryDownloader {
 	public LibraryDownloader() {
@@ -59,11 +58,11 @@ public class LibraryDownloader {
 		}
 	}
 
-	public Map<String, OutputStream> getLibrariesDownloadMapping(Version version) {
+	public Map<String, OutputStream> getLibrariesDownloadMapping(String version) {
 		Map<String, OutputStream> mapping = new HashMap<String, OutputStream>();
 
 		List<Library> libraries = new LibraryIndexer()
-				.getLibrariesOfVersion(version.getVersionName());
+				.getLibrariesOfVersion(version);
 
 		Object[] libraryEntry;
 

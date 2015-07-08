@@ -52,4 +52,16 @@ public class Library {
 
 		return passed;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public List<SystemFilterRule> getRules() {
+		return rules;
+	}
+
+	public String getNatives() {
+		return natives;
+	}
 }

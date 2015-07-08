@@ -8,5 +8,5 @@ public enum VersionType {
 	/**
 	 * for minecraft ver. 1.6+
 	 */
-	NEW,
+	NEW;
 }

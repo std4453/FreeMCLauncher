@@ -8,12 +8,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONObject;
+
 import com.std4453.freemclauncher.files.DirectoryHelper;
 import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.net.IServerManager;
 import com.std4453.freemclauncher.net.Server;
 import com.std4453.freemclauncher.net.ServerManagerFactory;
 import com.std4453.freemclauncher.util.LazyFileOutputStream;
+import com.std4453.freemclauncher.util.StructuredDataHelper;
 import com.std4453.freemclauncher.util.StructuredDataObject;
 
 public class AssetsIndexDownloader {
@@ -28,6 +31,17 @@ public class AssetsIndexDownloader {
 			return json.getString("assets");
 		else
 			return "legacy";
+	}
+
+	public String getAssetsIndexNameFromVersionName(String name) {
+		File file = new File(DirectoryHelper.versions, String.format(
+				"%s/%s.json", name, name));
+		String content = FileHelper.getFileContentAsString(file);
+		JSONObject obj = new JSONObject(content);
+		StructuredDataObject sdo = StructuredDataHelper.fromJSONObject(obj)
+				.toStructuredDataObject();
+
+		return getAssetsIndexNameFromVersionJSON(sdo);
 	}
 
 	public void downAssetsIndex(String indexName) {

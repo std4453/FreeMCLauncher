@@ -37,7 +37,7 @@ public class DownloadLibraries {
 		LibraryDownloader libraryDownloader = new LibraryDownloader();
 		for (Version version : indexer.getVersions()) {
 			Map<String, OutputStream> mapping = libraryDownloader
-					.getLibrariesDownloadMapping(version);
+					.getLibrariesDownloadMapping(version.getVersionName());
 			if (mapping.size() == 0)
 				continue;
 			DownloaderMultiple downloader = new DownloaderMultiple(mapping);
