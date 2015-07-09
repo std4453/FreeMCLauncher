@@ -128,28 +128,36 @@ public class FileHelper {
 		}
 	}
 
-	public static void delete(File file) {
+	public static boolean delete(File file) {
+		if (file == null)
+			return true;
+
+		boolean succeeded = true;
+		if (file.isDirectory())
+			for (File file1 : file.listFiles())
+				succeeded &= delete(file1);
+
+		succeeded &= file.delete();
+
+		return succeeded;
+	}
+
+	public static void deleteOnExit(final File file) {
 		if (file == null)
 			return;
 
-		if (file.isDirectory())
-			for (File file1 : file.listFiles())
-				delete(file1);
-
-		file.delete();
-	}
-	
-	public static void deleteOnExit(final File file) {
-		if (file==null)
-			return;
-		
 		if (file.isFile())
 			file.deleteOnExit();
 		else
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 				@Override
 				public void run() {
-					FileHelper.delete(file);
+					while (!FileHelper.delete(file))
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 				}
 			}));
 	}
