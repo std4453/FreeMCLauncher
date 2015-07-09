@@ -43,7 +43,7 @@ public class Launcher {
 		String args = jsonSDO.getString("minecraftArguments");
 
 		String auth_session = auth.getAuthSession();
-		String game_assets = DirectoryHelper.assets.getAbsolutePath();
+		String game_assets = AssetsDirHelper.getAssetsDir(profile);
 		String user_properties = auth.getUserProperties();
 		String assets_root = game_assets;
 		String auth_player_name = auth.getPlayerName();
@@ -85,7 +85,6 @@ public class Launcher {
 
 		NativesExtracter extracter = new NativesExtracter();
 		String nativesDir = extracter.extractNativesForProfile(profile);
-		System.out.println(nativesDir);
 
 		Process process = new ProcessBuilder("cmd", "/c", String.format(
 				"java -Djava.library.path=%s -Xms%s -cp %s %s %s", nativesDir,
@@ -97,6 +96,8 @@ public class Launcher {
 		process.waitFor();
 		scanner.close();
 		process.destroy();
+
+		FileHelper.deleteOnExit(new File(nativesDir));
 	}
 
 	public static void main(String[] args) throws IOException,
@@ -106,7 +107,7 @@ public class Launcher {
 		List<Profile> profiles = scanner.getProfiles();
 		Profile profile = null;
 		for (Profile profile1 : profiles)
-			if (profile1.getName().equals("1.7.3"))
+			if (profile1.getName().equals("1.5.2"))
 				profile = profile1;
 
 		new Launcher().launchNoCheck(profile);

@@ -23,8 +23,10 @@ public class NativesExtracter {
 		List<Library> natives = new Vector<Library>();
 
 		for (Library library : indexer.getLibrariesOfVersion(profile.getName())) {
-			if (library.getNatives() != null && !library.getNatives().isEmpty())
-				natives.add(library);
+			if (library.passed())
+				if (library.getNatives() != null
+						&& !library.getNatives().isEmpty())
+					natives.add(library);
 		}
 
 		String extractDir = "natives-" + profile.getName() + "-"
@@ -48,8 +50,6 @@ public class NativesExtracter {
 			expand.setDest(extractDst);
 			expand.execute();
 		}
-
-		extractDst.deleteOnExit();
 
 		return extractDst.getAbsolutePath();
 	}

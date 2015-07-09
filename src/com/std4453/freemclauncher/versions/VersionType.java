@@ -9,4 +9,8 @@ public enum VersionType {
 	 * for minecraft ver. 1.6+
 	 */
 	NEW;
+
+	public static VersionType fromString(String name) {
+		return name == null || !name.toLowerCase().equals("new") ? OLD : NEW;
+	}
 }
