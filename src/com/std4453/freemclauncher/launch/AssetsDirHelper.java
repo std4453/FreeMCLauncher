@@ -24,8 +24,16 @@ public class AssetsDirHelper {
 
 		if (launcherVersion > 10)
 			return DirectoryHelper.assets.getAbsolutePath();
-		else
+		else {
+			String mainClass = jsonSDO.getString("mainClass");
+			if (mainClass.toLowerCase().indexOf("launch") != -1) {
+				// for MC ver. 1.5.2-
+				return DirectoryHelper.resources.getAbsolutePath();
+			}
+			// for MC ver. 1.6~1.7.2
+
 			return new File(DirectoryHelper.assets, "virtual/legacy")
 					.getAbsolutePath();
+		}
 	}
 }

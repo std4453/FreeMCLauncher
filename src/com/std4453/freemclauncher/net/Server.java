@@ -6,5 +6,8 @@ public enum Server {
 	LIBRARIES_SERVER,
 	ASSETS_SERVER,
 	ASSETS_INDEX_SERVER,
+	//old servers
+	OLD_ASSETS_INDEX_SERVER,
+	OLD_ASSETS_SERVER,
 	//TODO:Login servers
 }

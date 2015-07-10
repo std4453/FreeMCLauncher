@@ -51,6 +51,7 @@ public class NativesExtracter {
 			expand.execute();
 		}
 
+		System.out.println(extractDst.getAbsolutePath());
 		return extractDst.getAbsolutePath();
 	}
 }

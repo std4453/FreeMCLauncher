@@ -39,38 +39,39 @@ public class StructuredDataHelper {
 
 		return sdArray;
 	}
-	
+
 	public static StructuredData fromXMLDocument(Document document) {
 		return fromXMLNode(document);
 	}
-	
+
 	private static StructuredData fromXMLNode(Node node) {
-		StructuredDataObject object=new StructuredDataObject();
-		NodeList list=node.getChildNodes();
+		StructuredDataObject object = new StructuredDataObject();
+		NodeList list = node.getChildNodes();
 		Node child;
 		String name;
-		for (int i=0;i<list.getLength();++i) {
-			child=list.item(i);
-			name=child.getNodeName();
-			
-			if (child.getNodeName()=="#text") {
-				object.put("#text", node.getNodeValue());
+		for (int i = 0; i < list.getLength(); ++i) {
+			child = list.item(i);
+			name = child.getNodeName();
+
+			if (child.getNodeName().equals("#text")) {
+				object.put("#text", child.getNodeValue());
 				continue;
 			}
-			
-			if (object.getChild(name)==null)
+
+			if (object.getChild(name) == null)
 				object.put(name, new StructuredDataArray());
 			object.getStructuredDataArray(name).put(fromXMLNode(child));
 		}
-		
+
 		StructuredDataObject attr;
-		object.put("#attr", attr=new StructuredDataObject());
-		NamedNodeMap map=node.getAttributes();
-		
-		for (int i=0;i<map.getLength();++i) {
-			attr.put(map.item(i).getNodeName(), map.item(i).getNodeValue());
-		}
-		
+		object.put("#attr", attr = new StructuredDataObject());
+		NamedNodeMap map = node.getAttributes();
+
+		if (map != null)
+			for (int i = 0; i < map.getLength(); ++i) {
+				attr.put(map.item(i).getNodeName(), map.item(i).getNodeValue());
+			}
+
 		return object;
 	}
 }

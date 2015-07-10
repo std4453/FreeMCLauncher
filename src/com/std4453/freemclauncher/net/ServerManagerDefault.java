@@ -37,6 +37,10 @@ public class ServerManagerDefault implements IServerManager {
 			return "http://s3.amazonaws.com/Minecraft.Download/";
 		case VERSION_INDEX_SERVER:
 			return "http://s3.amazonaws.com/Minecraft.Download/";
+		case OLD_ASSETS_SERVER:
+			return "http://s3.amazonaws.com/MinecraftResources/";
+		case OLD_ASSETS_INDEX_SERVER:
+			return "http://s3.amazonaws.com/MinecraftResources/";
 		default:
 			return null;
 		}
@@ -70,6 +74,11 @@ public class ServerManagerDefault implements IServerManager {
 					+ minecraft_download_server_fileType.toLowerCase();
 		case VERSION_INDEX_SERVER:
 			return rootServerDomain + "versions/versions.json";
+		case OLD_ASSETS_INDEX_SERVER:
+			return rootServerDomain;
+		case OLD_ASSETS_SERVER:
+			String old_assets_server_path = data.remove("assetPath");
+			return rootServerDomain + old_assets_server_path;
 		default:
 			return null;
 		}
