@@ -96,7 +96,9 @@ public class DownloaderAutoRetry {
 		CloseableHttpResponse response = null;
 		try {
 			get = new HttpGet(url);
-			get.addHeader("Range", "bytes=" + from + "-");
+			
+			if (rangeAllowed)
+				get.addHeader("Range", "bytes=" + from + "-");
 			response = client.execute(get);
 			is = response.getEntity().getContent();
 

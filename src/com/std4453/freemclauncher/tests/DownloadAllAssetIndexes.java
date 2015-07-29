@@ -5,6 +5,9 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import org.json.JSONObject;
 
 import com.std4453.freemclauncher.assets.AssetsIndexDownloader;
@@ -24,6 +27,13 @@ public class DownloadAllAssetIndexes {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			throw new RuntimeException(e);
+		}
+		
 		VersionIndexer indexer = new VersionIndexer();
 		indexer.loadVersionIndexFromFile(new File(DirectoryHelper.versions,
 				"versions.json"));
