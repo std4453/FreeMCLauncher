@@ -87,7 +87,7 @@ public class Launcher {
 		String nativesDir = extracter.extractNativesForProfile(profile);
 
 		Process process = new ProcessBuilder("cmd", "/c", String.format(
-				"java -Djava.library.path=%s -Xms%s -cp %s %s %s", nativesDir,
+				"javaw -Djava.library.path=%s -Xms%s -cp %s %s %s", nativesDir,
 				memory, cp, mainClass, args)).redirectErrorStream(true).start();
 		InputStream out = process.getInputStream();
 		Scanner scanner = new Scanner(out);
@@ -107,7 +107,7 @@ public class Launcher {
 		List<Profile> profiles = scanner.getProfiles();
 		Profile profile = null;
 		for (Profile profile1 : profiles)
-			if (profile1.getName().equals("1.5.2"))
+			if (profile1.getName().equals("1.8.7"))
 				profile = profile1;
 
 		new Launcher().launchNoCheck(profile);

@@ -10,6 +10,7 @@ public class ServerManagerFactory {
 	}
 	
 	private static void initServerManagerInternal() {
-		serverManager=new ServerManagerDefault();
+		//use BMCLAPI in China to get a far better speed
+		serverManager=new ServerManagerBMCLAPI();
 	}
 }
