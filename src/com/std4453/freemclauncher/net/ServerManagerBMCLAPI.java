@@ -32,15 +32,15 @@ public class ServerManagerBMCLAPI implements IServerManager {
 		case ASSETS_SERVER:
 			return "http://bmclapi2.bangbang93.com/assets/";
 		case LIBRARIES_SERVER:
-			return "https://libraries.minecraft.net/";
+			return "http://bmclapi2.bangbang93.com/libraries/";
 		case MINECRAFT_DOWNLOAD_SERVER:
 			return "http://bmclapi2.bangbang93.com/";
 		case VERSION_INDEX_SERVER:
-			return "http://s3.amazonaws.com/Minecraft.Download/";
+			return "http://bmclapi2.bangbang93.com/";
 		case OLD_ASSETS_SERVER:
-			return "http://s3.amazonaws.com/MinecraftResources/";
+			return "http://bmclapi2.bangbang93.com/resources/";
 		case OLD_ASSETS_INDEX_SERVER:
-			return "http://s3.amazonaws.com/MinecraftResources/";
+			return "http://bmclapi2.bangbang93.com/resources/";
 		default:
 			return null;
 		}
