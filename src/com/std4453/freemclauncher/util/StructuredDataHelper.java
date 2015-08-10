@@ -74,4 +74,33 @@ public class StructuredDataHelper {
 
 		return object;
 	}
+
+	public static JSONObject toJSONObject(StructuredDataObject sdo) {
+		JSONObject obj = new JSONObject();
+		for (String key : sdo.keySet()) {
+			Object child = sdo.getChild(key);
+			if (child instanceof String)
+				obj.put(key, child);
+			else if (child instanceof StructuredDataObject)
+				obj.put(key, toJSONObject((StructuredDataObject) child));
+			else if (child instanceof StructuredDataArray)
+				obj.put(key, toJSONArray((StructuredDataArray) child));
+		}
+
+		return obj;
+	}
+
+	public static JSONArray toJSONArray(StructuredDataArray sda) {
+		JSONArray arr = new JSONArray();
+		for (Object child : sda.getChildren()) {
+			if (child instanceof String)
+				arr.put(child);
+			else if (child instanceof StructuredDataObject)
+				arr.put(toJSONObject((StructuredDataObject) child));
+			else if (child instanceof StructuredDataArray)
+				arr.put(toJSONArray((StructuredDataArray) child));
+		}
+
+		return arr;
+	}
 }

@@ -18,6 +18,7 @@ public class Profile {
 	private static final LibraryDownloader libraryDownloader = new LibraryDownloader();
 
 	protected String name;
+	protected String id;
 
 	protected File profileJSON;
 	protected File profileJAR;
@@ -31,9 +32,10 @@ public class Profile {
 
 		try {
 			String jsonStr = FileHelper.getFileContentAsString(profileJSON);
-			JSONObject jsonObj=new JSONObject(jsonStr);
-			StructuredDataObject sdo=StructuredDataHelper.fromJSONObject(jsonObj).toStructuredDataObject();
-			sdo.getString("id");
+			JSONObject jsonObj = new JSONObject(jsonStr);
+			StructuredDataObject sdo = StructuredDataHelper.fromJSONObject(
+					jsonObj).toStructuredDataObject();
+			id = sdo.getString("id");
 		} catch (Throwable t) {
 			log(ERROR, "Corrupted or unavailable profile " + name);
 			log(ERROR, t);
@@ -69,5 +71,9 @@ public class Profile {
 		downloader.getFrame().setVisible(true);
 		downloader.run();
 		downloader.getFrame().dispose();
+	}
+
+	public String getId() {
+		return id;
 	}
 }

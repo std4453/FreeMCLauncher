@@ -70,3 +70,6 @@ gui.tabs.manageUsers.loginModeNone=无
 
 gui.action.none=无动作
 gui.action.scanningProfiles=正在扫描游戏文件
+
+gui.dialog.userConfNameConflict.title=设置配置名称
+gui.dialog.userConfNameConflict.content=名称"%s"非法或者与其他名称冲突，请更换名称并重试。

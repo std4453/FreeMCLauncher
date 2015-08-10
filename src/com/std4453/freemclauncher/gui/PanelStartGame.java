@@ -200,9 +200,13 @@ public class PanelStartGame extends JPanel {
 				&& GuiManager.mainWindow.getProgressBar() != null)
 			GuiManager.mainWindow.getProgressBar().setValue(100);
 	}
-	
+
 	protected void refreshProfile() {
-		int index=list.getSelectedIndex();
-		Profile profile=scanner.getProfiles().get(index);
+		int index = list.getSelectedIndex();
+		Profile profile = scanner.getProfiles().get(index);
+		lblSelectedArchive.setText(I18NHelper.getFormattedLocalization(
+				"gui.tabs.selectProfile.versionName", profile.getName()));
+		lblGameVersion.setText(I18NHelper.getFormattedLocalization(
+				"gui.tabs.selectProfile.mcVersion", profile.getId()));
 	}
 }

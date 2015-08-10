@@ -67,7 +67,7 @@ public class FileHelper {
 			return;
 		if (file.isDirectory())
 			file.mkdirs();
-		else
+		else if (file.getParentFile() != null)
 			file.getParentFile().mkdirs();
 	}
 
