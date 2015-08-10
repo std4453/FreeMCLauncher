@@ -18,10 +18,10 @@ public class PanelSettings extends JPanel {
 	private JLabel lblTotalMemory;
 	private JLabel lblAvailableMemory;
 	private JTextField textField;
-	private JButton button_1;
-	private JCheckBox checkBox;
-	private JCheckBox chckbxjavaexe;
-	private JButton button;
+	private JButton btnInguitabssettingsbrowse;
+	private JCheckBox ckbxShowConsole;
+	private JCheckBox ckbxjavaexe;
+	private JButton btnAuto;
 	private JSpinner spinner;
 
 	/**
@@ -37,61 +37,65 @@ public class PanelSettings extends JPanel {
 		scrollPane.setViewportView(panel);
 		panel.setLayout(null);
 		
-		JLabel label = new JLabel("\u57FA\u7840\u8BBE\u7F6E\uFF1A");
-		label.setBounds(10, 10, 67, 15);
-		panel.add(label);
+		JLabel lblInguitabssettingsbasicsettings = new JLabel("i18n:gui.tabs.settings.basicSettings");
+		lblInguitabssettingsbasicsettings.setBounds(10, 10, 428, 15);
+		panel.add(lblInguitabssettingsbasicsettings);
 		
-		JLabel label_1 = new JLabel("\u672C\u673A\u5185\u5B58\uFF1A");
-		label_1.setBounds(10, 50, 67, 15);
-		panel.add(label_1);
+		JLabel lblInguitabssettingstotalmemory = new JLabel("i18n:gui.tabs.settings.totalMemory");
+		lblInguitabssettingstotalmemory.setBounds(10, 50, 93, 15);
+		panel.add(lblInguitabssettingstotalmemory);
 		
 		lblTotalMemory = new JLabel("TOTAL_MEMORY");
-		lblTotalMemory.setBounds(87, 50, 399, 15);
+		lblTotalMemory.setBounds(124, 50, 399, 15);
 		panel.add(lblTotalMemory);
 		
-		JLabel label_2 = new JLabel("\u53EF\u7528\u5185\u5B58\uFF1A");
-		label_2.setBounds(10, 75, 67, 15);
-		panel.add(label_2);
+		JLabel lblInguitabssettingsfreememory = new JLabel("i18n:gui.tabs.settings.freeMemory");
+		lblInguitabssettingsfreememory.setBounds(10, 75, 104, 15);
+		panel.add(lblInguitabssettingsfreememory);
 		
 		lblAvailableMemory = new JLabel("AVAILABLE_MEMORY");
-		lblAvailableMemory.setBounds(87, 75, 399, 15);
+		lblAvailableMemory.setBounds(124, 75, 399, 15);
 		panel.add(lblAvailableMemory);
 		
-		JLabel label_3 = new JLabel("\u542F\u52A8\u5185\u5B58\uFF1A");
-		label_3.setBounds(10, 103, 67, 15);
-		panel.add(label_3);
+		JLabel lblInguitabssettingslaunchmemory = new JLabel("i18n:gui.tabs.settings.launchMemory");
+		lblInguitabssettingslaunchmemory.setBounds(10, 103, 104, 15);
+		panel.add(lblInguitabssettingslaunchmemory);
 		
 		spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(128, 128, 4096, 1));
-		spinner.setBounds(87, 100, 78, 22);
+		spinner.setBounds(124, 100, 78, 22);
 		panel.add(spinner);
 		
 		JLabel lblMb = new JLabel("MB");
-		lblMb.setBounds(172, 103, 54, 15);
+		lblMb.setBounds(212, 100, 54, 15);
 		panel.add(lblMb);
 		
-		button = new JButton("\u81EA\u52A8\u9009\u62E9\u542F\u52A8\u5185\u5B58\u5927\u5C0F");
-		button.setBounds(10, 131, 155, 23);
-		panel.add(button);
+		btnAuto = new JButton("i18n:gui.tabs.settings.automaticallyAdjustLaunchMemory");
+		btnAuto.setBounds(10, 131, 155, 23);
+		panel.add(btnAuto);
 		
-		JLabel label_4 = new JLabel("\u9AD8\u7EA7\u8BBE\u7F6E\uFF1A");
-		label_4.setBounds(10, 183, 67, 15);
-		panel.add(label_4);
+		JButton btnRefresh = new JButton("i18n:gui.tabs.settings.refresh");
+		btnRefresh.setBounds(173, 131, 67, 23);
+		panel.add(btnRefresh);
 		
-		chckbxjavaexe = new JCheckBox("\u4F7F\u7528java.exe\u542F\u52A8\u6E38\u620F");
-		chckbxjavaexe.setBounds(10, 215, 212, 23);
-		panel.add(chckbxjavaexe);
+		JLabel lblInguitabssettingsadvancedsettings = new JLabel("i18n:gui.tabs.settings.advancedSettings");
+		lblInguitabssettingsadvancedsettings.setBounds(10, 183, 513, 15);
+		panel.add(lblInguitabssettingsadvancedsettings);
 		
-		checkBox = new JCheckBox("\u663E\u793A\u6E38\u620F\u547D\u4EE4\u884C\u7A97\u53E3");
-		checkBox.setBounds(10, 240, 155, 23);
-		panel.add(checkBox);
+		ckbxjavaexe = new JCheckBox("i18n:gui.tabs.settings.launchWithJava");
+		ckbxjavaexe.setBounds(10, 215, 513, 23);
+		panel.add(ckbxjavaexe);
 		
-		JLabel lblJava = new JLabel("Java\u8BBE\u7F6E\uFF1A");
-		lblJava.setBounds(10, 314, 67, 15);
+		ckbxShowConsole = new JCheckBox("i18n:gui.tabs.settings.showConsole");
+		ckbxShowConsole.setBounds(10, 240, 513, 23);
+		panel.add(ckbxShowConsole);
+		
+		JLabel lblJava = new JLabel("i18n:gui.tabs.settings.javaSettings");
+		lblJava.setBounds(10, 314, 513, 15);
 		panel.add(lblJava);
 		
-		JLabel lblJavaexejavawexe = new JLabel("java.exe,javaw.exe\u4F4D\u7F6E\uFF1A");
-		lblJavaexejavawexe.setBounds(10, 359, 155, 15);
+		JLabel lblJavaexejavawexe = new JLabel("i18n:gui.tabs.settings.javaExecutableLocation");
+		lblJavaexejavawexe.setBounds(10, 359, 513, 15);
 		panel.add(lblJavaexejavawexe);
 		
 		textField = new JTextField();
@@ -99,13 +103,13 @@ public class PanelSettings extends JPanel {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		button_1 = new JButton("\u6D4F\u89C8...");
-		button_1.setBounds(232, 382, 93, 23);
-		panel.add(button_1);
+		btnInguitabssettingsbrowse = new JButton("i18n:gui.tabs.settings.browse");
+		btnInguitabssettingsbrowse.setBounds(232, 382, 93, 23);
+		panel.add(btnInguitabssettingsbrowse);
 		
-		JCheckBox checkBox_1 = new JCheckBox("\u542F\u52A8\u540E\u5173\u95ED\u542F\u52A8\u5668\u7A97\u53E3");
-		checkBox_1.setBounds(10, 265, 155, 23);
-		panel.add(checkBox_1);
+		JCheckBox ckbxCloseLauncher = new JCheckBox("i18n:gui.tabs.settings.closeLauncher");
+		ckbxCloseLauncher.setBounds(10, 265, 513, 23);
+		panel.add(ckbxCloseLauncher);
 
 	}
 }

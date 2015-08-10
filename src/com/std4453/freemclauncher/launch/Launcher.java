@@ -107,7 +107,7 @@ public class Launcher {
 		List<Profile> profiles = scanner.getProfiles();
 		Profile profile = null;
 		for (Profile profile1 : profiles)
-			if (profile1.getName().equals("1.8.7"))
+			if (profile1.getName().equals("1.7.2"))
 				profile = profile1;
 
 		new Launcher().launchNoCheck(profile);

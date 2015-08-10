@@ -1,11 +1,18 @@
 package com.std4453.freemclauncher.profiles;
 
+import static com.std4453.freemclauncher.logging.Logger.*;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.json.JSONObject;
+
+import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.gui.DownloaderMultiple;
 import com.std4453.freemclauncher.libraries.LibraryDownloader;
+import com.std4453.freemclauncher.util.StructuredDataHelper;
+import com.std4453.freemclauncher.util.StructuredDataObject;
 
 public class Profile {
 	private static final LibraryDownloader libraryDownloader = new LibraryDownloader();
@@ -22,7 +29,17 @@ public class Profile {
 		this.profileJSON = profileJSON;
 		this.profileJAR = profileJAR;
 
-		// TODO: check for corrupted files.
+		try {
+			String jsonStr = FileHelper.getFileContentAsString(profileJSON);
+			JSONObject jsonObj=new JSONObject(jsonStr);
+			StructuredDataObject sdo=StructuredDataHelper.fromJSONObject(jsonObj).toStructuredDataObject();
+			sdo.getString("id");
+		} catch (Throwable t) {
+			log(ERROR, "Corrupted or unavailable profile " + name);
+			log(ERROR, t);
+			available = false;
+		}
+
 		available = true;
 	}
 
@@ -37,7 +54,7 @@ public class Profile {
 	public boolean isAvailable() {
 		return available;
 	}
-	
+
 	public String getName() {
 		return name;
 	}

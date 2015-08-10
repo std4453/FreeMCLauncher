@@ -7,6 +7,7 @@ import java.io.InputStream;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
 public class PanelAbout extends JPanel {
 
@@ -19,7 +20,8 @@ public class PanelAbout extends JPanel {
 	 * Create the panel.
 	 */
 	public PanelAbout() {
-		setLayout(new BorderLayout(0, 0));
+		setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLayout(new BorderLayout(2, 2));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane);
