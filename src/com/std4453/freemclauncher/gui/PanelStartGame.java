@@ -196,13 +196,26 @@ public class PanelStartGame extends JPanel {
 		postInit();
 	}
 
-	protected void launchProfile(Profile profile) {
-		Launcher launcher = new Launcher();
-		try {
-			launcher.launchNoCheck(profile, getAuth(getConfOfProfile(profile)));
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
+	protected void launchProfile(final Profile profile) {
+		this.setEnabled(false);
+
+		new Thread(new Runnable() {
+			public void run() {
+				GuiManager.mainWindow.getLblNewLabel().setText(
+						"Launching profile " + profile.getName() + "...");
+				GuiManager.mainWindow.getProgressBar().setValue(0);
+				Launcher launcher = new Launcher();
+				try {
+					launcher.launchNoCheck(profile,
+							getAuth(getConfOfProfile(profile)));
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
+				GuiManager.mainWindow.clearAction();
+
+				PanelStartGame.this.setEnabled(true);
+			}
+		}).start();
 	}
 
 	protected UserConf getConfOfProfile(Profile profile) {
