@@ -73,3 +73,5 @@ gui.action.scanningProfiles=正在扫描游戏文件
 
 gui.dialog.userConfNameConflict.title=设置配置名称
 gui.dialog.userConfNameConflict.content=名称"%s"非法或者与其他名称冲突，请更换名称并重试。
+gui.dialog.delectConfConfirm.title=删除用户配置
+gui.dialog.delectConfConfirm.content=你真的要删除配置"%s"吗？一些游戏版本可能没有成就，统计等信息哦!

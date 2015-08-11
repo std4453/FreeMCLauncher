@@ -36,6 +36,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.ListSelectionModel;
 
 import java.awt.Dimension;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class PanelManageUsers extends JPanel {
 
@@ -65,6 +67,8 @@ public class PanelManageUsers extends JPanel {
 				users.add(newUserConf());
 				refreshUsers();
 				writeUsers();
+
+				list.setSelectedIndex(model.getSize() - 1);
 			}
 		});
 		panel_1.add(btnNewConf);
@@ -75,12 +79,36 @@ public class PanelManageUsers extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int selection = list.getSelectedIndex();
 				if (selection != -1) {
+					if (!DialogBoxHelper.confirm(
+							I18NHelper
+									.getFormattedLocalization("gui.dialog.delectConfConfirm.title"),
+							I18NHelper.getFormattedLocalization(
+									"gui.dialog.delectConfConfirm.content",
+									users.get(selection).getId())))
+						return;
+
 					users.remove(selection);
 					refreshUsers();
 					writeUsers();
 
-					if (users.size() == 0)
+					if (users.size() == 0) {
+						list.setSelectedIndex(-1);
+
+						textField.setText("");
+						textField.setEnabled(false);
+						textField_1.setText("");
+						textField_1.setEnabled(false);
+						passwordField.setText("");
+						passwordField.setEnabled(false);
+
+						comboBox.setSelectedIndex(0);
+						comboBox.setEnabled(false);
+
+						ckbxdemo.setSelected(false);
+						ckbxdemo.setEnabled(false);
+
 						return;
+					}
 
 					textField.setText(users.get(selection).getId());
 					textField.setEnabled(true);
@@ -233,6 +261,19 @@ public class PanelManageUsers extends JPanel {
 		panel.add(lblInguitabsmanageusersloginmode);
 
 		comboBox = new JComboBox<String>();
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				if (users.size() <= selection)
+					return;
+				int select = comboBox.getSelectedIndex();
+				users.get(selection).setMode(select);
+				writeUsers();
+			}
+		});
 		comboBox.setModel(new DefaultComboBoxModel<String>(
 				new String[] {
 						I18NHelper
