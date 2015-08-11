@@ -4,6 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,16 +22,23 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import org.json.JSONArray;
+
+import com.std4453.freemclauncher.auth.AuthenticatorOffline;
+import com.std4453.freemclauncher.auth.IAuthenticator;
+import com.std4453.freemclauncher.files.FileHelper;
+import com.std4453.freemclauncher.gui.PanelManageUsers.UserConf;
 import com.std4453.freemclauncher.i18n.I18NHelper;
+import com.std4453.freemclauncher.launch.Launcher;
 import com.std4453.freemclauncher.profiles.Profile;
 import com.std4453.freemclauncher.profiles.ProfileScanner;
 import com.std4453.freemclauncher.util.ArrayListModel;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
+import com.std4453.freemclauncher.util.StructuredDataArray;
+import com.std4453.freemclauncher.util.StructuredDataHelper;
+import com.std4453.freemclauncher.util.StructuredDataObject;
 
 public class PanelStartGame extends JPanel {
 	/**
@@ -116,6 +132,18 @@ public class PanelStartGame extends JPanel {
 				BorderLayout.WEST);
 
 		comboBox = new JComboBox<String>();
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				userMapping.put(scanner.getProfiles().get(selection).getName(),
+						cbModel.getElementAt(comboBox.getSelectedIndex()));
+				writeMappings();
+			}
+		});
+		comboBox.setModel(cbModel = new ArrayListModel());
 		panel_4.add(comboBox, BorderLayout.CENTER);
 
 		JPanel panel_5 = new JPanel();
@@ -154,9 +182,71 @@ public class PanelStartGame extends JPanel {
 		panel_1.add(btnReload);
 
 		btnLaunch = new JButton("i18n:gui.tabs.selectProfile.launchGame");
+		btnLaunch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				launchProfile(scanner.getProfiles().get(selection));
+			}
+		});
 		panel_1.add(btnLaunch);
 
 		postInit();
+	}
+
+	protected void launchProfile(Profile profile) {
+		Launcher launcher = new Launcher();
+		try {
+			launcher.launchNoCheck(profile, getAuth(getConfOfProfile(profile)));
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected UserConf getConfOfProfile(Profile profile) {
+		String name = getConf(profile);
+		if (name == null || name.isEmpty())
+			return null;
+
+		List<UserConf> users = GuiManager.mainWindow.getPanelManageUsers().users;
+		for (UserConf conf : users)
+			if (conf.getName().equals(name))
+				return conf;
+
+		return null;
+	}
+
+	protected IAuthenticator getAuth(UserConf conf) {
+		if (conf == null)
+			return new AuthenticatorOffline();
+
+		return conf.getAuthenticator();
+	}
+
+	protected void writeMappings() {
+		StructuredDataArray sda = new StructuredDataArray();
+
+		for (String profile : userMapping.keySet()) {
+			if (!hasSuchProfile(profile))
+				continue;
+
+			String conf = userMapping.get(profile);
+			if (!GuiManager.mainWindow.getPanelManageUsers().hasConfWithName(
+					conf))
+				continue;
+
+			StructuredDataObject sdo = new StructuredDataObject();
+			sdo.put("name", profile);
+			sdo.put("conf", conf);
+
+			sda.put(sdo);
+		}
+
+		File file = new File("profiles.conf");
+		FileHelper.writeToFile(file, StructuredDataHelper.toJSONArray(sda)
+				.toString());
 	}
 
 	protected void postInit() {
@@ -169,6 +259,7 @@ public class PanelStartGame extends JPanel {
 				.setText("i18n:gui.tabs.selectProfile.versionNameEmpty");
 		lblGameVersion.setText("i18n:gui.tabs.selectProfile.mcVersionEmpty");
 
+		init();
 		loadProfiles();
 	}
 
@@ -199,14 +290,131 @@ public class PanelStartGame extends JPanel {
 		if (GuiManager.mainWindow != null
 				&& GuiManager.mainWindow.getProgressBar() != null)
 			GuiManager.mainWindow.getProgressBar().setValue(100);
+
+		readProfilesConf();
 	}
 
 	protected void refreshProfile() {
 		int index = list.getSelectedIndex();
+		if (index < 0) {
+			lblSelectedArchive
+					.setText(I18NHelper
+							.getFormattedLocalization("gui.tabs.selectProfile.versionNameEmpty"));
+			lblGameVersion
+					.setText(I18NHelper
+							.getFormattedLocalization("gui.tabs.selectProfile.mcVersionEmpty"));
+
+			comboBox.setSelectedIndex(0);
+			comboBox.setEnabled(false);
+
+			btnforge.setEnabled(false);
+			btnmod.setEnabled(false);
+			btnexe.setEnabled(false);
+
+			btnLaunch.setEnabled(false);
+
+			return;
+		}
+
 		Profile profile = scanner.getProfiles().get(index);
 		lblSelectedArchive.setText(I18NHelper.getFormattedLocalization(
 				"gui.tabs.selectProfile.versionName", profile.getName()));
 		lblGameVersion.setText(I18NHelper.getFormattedLocalization(
 				"gui.tabs.selectProfile.mcVersion", profile.getId()));
+
+		comboBox.setSelectedIndex(getConfNamePositionInModel(getConf(profile)));
+		comboBox.setEnabled(true);
+
+		// TODO: should check whether Forge has been installed
+		btnforge.setEnabled(true);
+		btnmod.setEnabled(true);
+		btnexe.setEnabled(true);
+
+		btnLaunch.setEnabled(true);
+	}
+
+	protected void writeDefaultProfilesConfFile() {
+		File file = new File("profiles.conf");
+		FileHelper.writeToFile(file, "[]");
+	}
+
+	protected void writeDefaultProfilesConfFileIfNeeded() {
+		File file = new File("profiles.conf");
+		if (!file.isFile())
+			writeDefaultProfilesConfFile();
+	}
+
+	protected ArrayListModel cbModel;
+	protected Map<String, String> userMapping;
+
+	protected void init() {
+		this.userMapping = new HashMap<String, String>();
+		writeDefaultProfilesConfFileIfNeeded();
+	}
+
+	protected boolean hasSuchProfile(String name) {
+		for (Profile profile : scanner.getProfiles())
+			if (profile.getName().equals(name))
+				return true;
+
+		return false;
+	}
+
+	protected String getConf(Profile profile) {
+		if (profile == null)
+			return null;
+
+		String conf = userMapping.get(profile.getName());
+		if (conf == null || conf.isEmpty())
+			return "";
+
+		if (!GuiManager.mainWindow.getPanelManageUsers().hasConfWithName(conf))
+			return "";
+
+		return conf;
+	}
+
+	protected void readProfilesConf() {
+		userMapping.clear();
+
+		File file = new File("profiles.conf");
+		String content = FileHelper.getFileContentAsString(file);
+
+		JSONArray json = new JSONArray(content);
+		StructuredDataArray sda = StructuredDataHelper.fromJSONArray(json)
+				.toStructuredDataArray();
+
+		for (Object object : sda) {
+			if (!(object instanceof StructuredDataObject))
+				continue;
+
+			StructuredDataObject sdo = (StructuredDataObject) object;
+			String name = sdo.getString("name");
+			String confName = sdo.getString("conf");
+
+			if (hasSuchProfile(name))
+				userMapping.put(name, confName);
+		}
+	}
+
+	protected int getConfNamePositionInModel(String name) {
+		if (name == null || name.isEmpty())
+			return 0;
+
+		int index = cbModel.indexOf(name);
+
+		if (index < 0)
+			return 0;
+		else
+			return index;
+	}
+
+	protected void refreshAvailableUserConfs(List<UserConf> users) {
+		cbModel.clear();
+		cbModel.add(I18NHelper.getFormattedLocalization("general.none"));
+		for (UserConf conf : users)
+			cbModel.add(conf.getId());
+
+		refreshProfile();
 	}
 }

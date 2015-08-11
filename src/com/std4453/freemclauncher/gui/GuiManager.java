@@ -20,7 +20,8 @@ public class GuiManager {
 
 		I18NHelper.loadDefaultLocalizations(new File("lang/"));
 
-		mainWindow = new MainWindow();
+		mainWindow = new MainWindow(null);
+		mainWindow.initialize();
 		mainWindow.getFrame().setVisible(true);
 
 		I18NHelper.localizeTexts(mainWindow.getFrame());

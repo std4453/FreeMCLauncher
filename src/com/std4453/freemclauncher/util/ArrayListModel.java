@@ -1,17 +1,21 @@
 package com.std4453.freemclauncher.util;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
 
-public class ArrayListModel extends AbstractListModel<String> {
+public class ArrayListModel extends AbstractListModel<String> implements
+		ComboBoxModel<String>, Iterable<String> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8221536792182356344L;
 
 	protected Vector<String> data;
+	protected String selected;
 
 	public ArrayListModel() {
 		this.data = new Vector<String>();
@@ -50,9 +54,28 @@ public class ArrayListModel extends AbstractListModel<String> {
 		this.data.addAll(data);
 		this.fireContentsChanged(this, 0, this.data.size() - 1);
 	}
-	
+
 	public void clear() {
 		this.data.clear();
 		this.fireContentsChanged(this, 0, -1);
+	}
+
+	@Override
+	public void setSelectedItem(Object anItem) {
+		if (this.data.contains(anItem))
+			selected = (String) anItem;
+	}
+
+	@Override
+	public Object getSelectedItem() {
+		return selected;
+	}
+
+	public int indexOf(String str) {
+		return this.data.indexOf(str);
+	}
+
+	public Iterator<String> iterator() {
+		return this.data.iterator();
 	}
 }

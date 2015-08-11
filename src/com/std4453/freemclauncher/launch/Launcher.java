@@ -25,12 +25,16 @@ public class Launcher {
 
 	public void launchNoCheck(Profile profile) throws IOException,
 			InterruptedException {
+		launchNoCheck(profile,
+				AuthenticatorFactory.getAuthenticatorForVersion(profile));
+	}
+
+	public void launchNoCheck(Profile profile, IAuthenticator auth)
+			throws IOException, InterruptedException {
 		if (profile == null)
 			return;
 
 		profile.checkLibraryAvailability();
-
-		IAuthenticator auth = AuthenticatorFactory.getAuthenticatorForVersion();
 
 		File jsonFile = new File(DirectoryHelper.versions, String.format(
 				"%s/%s.json", profile.getName(), profile.getName()));
@@ -81,7 +85,7 @@ public class Launcher {
 		String mainClass = MainClassHelper.getMinecraftMainClass(profile);
 
 		// TODO:calculate memory
-		String memory = "128M";
+		String memory = "512M";
 
 		NativesExtracter extracter = new NativesExtracter();
 		String nativesDir = extracter.extractNativesForProfile(profile);

@@ -1,18 +1,16 @@
 package com.std4453.freemclauncher.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.border.EtchedBorder;
+import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 
 import com.std4453.freemclauncher.i18n.I18NHelper;
 
@@ -53,9 +51,29 @@ public class MainWindow {
 	}
 
 	/**
+	 * Another constructor which does not initializes the frame when
+	 * constructed. As in the code, all the panels are accessed via
+	 * {@codeGuiManager.mainWindow.getPanelXXX()}, if any panel tries to access
+	 * it while initialization, it will cause an {@code NullPointerException} to
+	 * be thrown, because GuiManager.mainWindow is {@code null} before the
+	 * constructor returns.<br>
+	 * Instead of the {@code MainWindow(void)} constructor, this one accepts a
+	 * parameter, but this is only for the purpose to separate the two
+	 * constructor and is never used, as WindowBuilder required the first one.<br>
+	 * To avoid this kind of problems mentioned before, The whole construction
+	 * should look like this:<p>
+	 * <code>
+	 * MainWindow mainWindow=new MainWindow(null);<br>
+	 * mainWindow.initialize();
+	 * </code>
+	 */
+	public MainWindow(GuiManager unused) {
+	}
+
+	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	protected void initialize() {
 		frmFreeMclauncherV = new JFrame();
 		frmFreeMclauncherV.setMinimumSize(new Dimension(588, 530));
 		frmFreeMclauncherV.setTitle("Free MCLauncher v1.01");
@@ -103,7 +121,7 @@ public class MainWindow {
 		progressBar = new JProgressBar();
 		progressBar.setBorder(new EmptyBorder(3, 0, 3, 3));
 		panel.add(progressBar, BorderLayout.EAST);
-		
+
 		clearAction();
 	}
 

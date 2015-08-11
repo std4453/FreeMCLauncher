@@ -19,6 +19,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.json.JSONArray;
 
+import com.std4453.freemclauncher.auth.AuthenticatorOffline;
+import com.std4453.freemclauncher.auth.IAuthenticator;
 import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.i18n.I18NHelper;
 import com.std4453.freemclauncher.util.ArrayListModel;
@@ -91,7 +93,7 @@ public class PanelManageUsers extends JPanel {
 					refreshUsers();
 					writeUsers();
 
-					if (users.size() == 0) {
+					if (selection == users.size()) {
 						list.setSelectedIndex(-1);
 
 						textField.setText("");
@@ -406,6 +408,9 @@ public class PanelManageUsers extends JPanel {
 
 		for (UserConf user : users)
 			model.add(user.getId());
+
+		GuiManager.mainWindow.getPanelStartGame().refreshAvailableUserConfs(
+				users);
 	}
 
 	protected void createDefaultUsersFileIfNessessary() {
@@ -480,6 +485,11 @@ public class PanelManageUsers extends JPanel {
 
 		public void setDemo(boolean demo) {
 			this.demo = demo;
+		}
+
+		public IAuthenticator getAuthenticator() {
+			// TODO: return an real authenticator
+			return new AuthenticatorOffline();
 		}
 	}
 }
