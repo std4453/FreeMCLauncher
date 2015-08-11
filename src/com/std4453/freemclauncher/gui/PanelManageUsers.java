@@ -25,13 +25,16 @@ import com.std4453.freemclauncher.util.ArrayListModel;
 import com.std4453.freemclauncher.util.StructuredDataArray;
 import com.std4453.freemclauncher.util.StructuredDataHelper;
 import com.std4453.freemclauncher.util.StructuredDataObject;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.ListSelectionModel;
+
 import java.awt.Dimension;
 
 public class PanelManageUsers extends JPanel {
@@ -88,6 +91,9 @@ public class PanelManageUsers extends JPanel {
 
 					comboBox.setSelectedIndex(users.get(selection).getMode());
 					comboBox.setEnabled(true);
+
+					ckbxdemo.setSelected(users.get(selection).isDemo());
+					ckbxdemo.setEnabled(true);
 				}
 			}
 		});
@@ -116,6 +122,9 @@ public class PanelManageUsers extends JPanel {
 
 					comboBox.setSelectedIndex(0);
 					comboBox.setEnabled(false);
+
+					ckbxdemo.setSelected(false);
+					ckbxdemo.setEnabled(false);
 				} else {
 					textField.setText(users.get(selection).getId());
 					textField.setEnabled(true);
@@ -126,6 +135,9 @@ public class PanelManageUsers extends JPanel {
 
 					comboBox.setSelectedIndex(users.get(selection).getMode());
 					comboBox.setEnabled(true);
+
+					ckbxdemo.setSelected(users.get(selection).isDemo());
+					ckbxdemo.setEnabled(true);
 				}
 			}
 		});
@@ -179,6 +191,17 @@ public class PanelManageUsers extends JPanel {
 		panel.add(lblInguitabsmanageusersusername);
 
 		textField_1 = new JTextField();
+		textField_1.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				users.get(selection).setName(textField_1.getText());
+				writeUsers();
+			}
+		});
 		textField_1.setBounds(10, 113, 154, 21);
 		panel.add(textField_1);
 		textField_1.setColumns(10);
@@ -189,6 +212,18 @@ public class PanelManageUsers extends JPanel {
 		panel.add(lblInguitabsmanageuserspassword);
 
 		passwordField = new JPasswordField();
+		passwordField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				users.get(selection).setPassword(
+						new String(passwordField.getPassword()));
+				writeUsers();
+			}
+		});
 		passwordField.setBounds(10, 169, 154, 21);
 		panel.add(passwordField);
 
@@ -211,8 +246,17 @@ public class PanelManageUsers extends JPanel {
 		comboBox.setBounds(10, 260, 154, 21);
 		panel.add(comboBox);
 
-		JCheckBox ckbxdemo = new JCheckBox(
-				"i18n:gui.tabs.manageUsers.launchDemo");
+		ckbxdemo = new JCheckBox("i18n:gui.tabs.manageUsers.launchDemo");
+		ckbxdemo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int selection = list.getSelectedIndex();
+				if (selection < 0)
+					return;
+
+				users.get(selection).setDemo(ckbxdemo.isSelected());
+				writeUsers();
+			}
+		});
 		ckbxdemo.setBounds(6, 323, 229, 23);
 		panel.add(ckbxdemo);
 
@@ -223,6 +267,7 @@ public class PanelManageUsers extends JPanel {
 
 	protected java.util.List<UserConf> users;
 	private JList<String> list;
+	private JCheckBox ckbxdemo;
 
 	protected void init() {
 		users = new Vector<UserConf>();
@@ -241,6 +286,9 @@ public class PanelManageUsers extends JPanel {
 
 		comboBox.setSelectedIndex(0);
 		comboBox.setEnabled(false);
+
+		ckbxdemo.setSelected(false);
+		ckbxdemo.setEnabled(false);
 	}
 
 	protected void readUsers() {
@@ -262,8 +310,9 @@ public class PanelManageUsers extends JPanel {
 				String name = sdo.getString("name");
 				String password = sdo.getString("password");
 				int mode = sdo.getInt("mode");
+				boolean demo = sdo.getBoolean("demo");
 
-				users.add(new UserConf(id, name, password, mode));
+				users.add(new UserConf(id, name, password, mode, demo));
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -279,6 +328,8 @@ public class PanelManageUsers extends JPanel {
 			sdo.put("id", conf.getId());
 			sdo.put("name", conf.getName());
 			sdo.put("password", conf.getPassword());
+			sdo.put("mode", conf.getMode());
+			sdo.put("demo", conf.isDemo());
 
 			sda.put(sdo);
 		}
@@ -331,7 +382,7 @@ public class PanelManageUsers extends JPanel {
 
 	protected UserConf newUserConf() {
 		String id = getFreeConfName();
-		return new UserConf(id, "My User Name", "", 2);
+		return new UserConf(id, "My User Name", "", 2, false);
 	}
 
 	public static class UserConf {
@@ -339,12 +390,15 @@ public class PanelManageUsers extends JPanel {
 		protected String name;
 		protected String password;
 		protected int mode;
+		protected boolean demo;
 
-		public UserConf(String id, String name, String password, int mode) {
+		public UserConf(String id, String name, String password, int mode,
+				boolean demo) {
 			this.id = id;
 			this.name = name;
 			this.password = password;
 			this.mode = mode;
+			this.demo = demo;
 		}
 
 		public String getId() {
@@ -377,6 +431,14 @@ public class PanelManageUsers extends JPanel {
 
 		public void setMode(int mode) {
 			this.mode = mode;
+		}
+
+		public boolean isDemo() {
+			return demo;
+		}
+
+		public void setDemo(boolean demo) {
+			this.demo = demo;
 		}
 	}
 }
