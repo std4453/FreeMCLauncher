@@ -9,7 +9,6 @@ public class AuthenticatorFactory {
 		//i.e. AuthenticatorLegacy or AuthenticatorYggdrasil
 		
 		//Temporarily returns a offline authenticator
-//		return new AuthenticatorOffline();
-		return new AuthenticatorStd4453Test();
+		return new AuthenticatorOffline();
 	}
 }

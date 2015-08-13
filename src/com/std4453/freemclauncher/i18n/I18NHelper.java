@@ -1,8 +1,11 @@
 package com.std4453.freemclauncher.i18n;
 
+import static com.std4453.freemclauncher.logging.Logger.*;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -17,8 +20,6 @@ import javax.swing.JLabel;
 
 import com.std4453.freemclauncher.files.FileHelper;
 
-import static com.std4453.freemclauncher.logging.Logger.*;
-
 public class I18NHelper {
 	protected static Map<String, Map<String, String>> mappings;
 	protected static List<Class<?>> setTextClasses = Arrays
@@ -30,6 +31,7 @@ public class I18NHelper {
 
 	static {
 		mappings = new HashMap<String, Map<String, String>>();
+		loadInternalLocalizations();
 	}
 
 	public static void addLocalizationEntries(String lang, String key,
@@ -82,9 +84,13 @@ public class I18NHelper {
 		if (!file.isFile())
 			return false;
 
+		String content = FileHelper.getFileContentAsString(file);
+		return loadLocalizations(lang, content);
+	}
+
+	public static boolean loadLocalizations(String lang, String content) {
 		ensureLangMappingExists(lang);
 
-		String content = FileHelper.getFileContentAsString(file);
 		Pattern pattern = Pattern.compile("^\\s*[\\.a-zA-Z0-9]+=.*?\\s*$");
 
 		String[] lines = content.split("\n");
@@ -101,15 +107,36 @@ public class I18NHelper {
 		return true;
 	}
 
+	public static boolean loadLocalizations(String lang, InputStream is) {
+		if (is == null)
+			return false;
+
+		try {
+			String content = FileHelper.toString(is);
+			return loadLocalizations(lang, content);
+		} catch (Throwable t) {
+			log(ERROR, "Error while loading data of input stream");
+			log(ERROR, t);
+
+			return false;
+		}
+	}
+
 	public static boolean loadDefaultLocalizations(String lang, File langFiles) {
 		return loadLocalizations(lang, new File(langFiles, lang + ".lang"));
 	}
 
 	public static void loadDefaultLocalizations(File langFiles) {
 		if (!loadDefaultLocalizations(getDefaultLang(), langFiles)) {
-			overrideLocalLanguage("en_US");
-			loadDefaultLocalizations(overriddenLanguage, langFiles);
+			overrideLocalLanguage("zh_CN");
 		}
+	}
+
+	public static void loadInternalLocalizations() {
+		loadLocalizations("zh_CN",
+				I18NHelper.class.getResourceAsStream("/assets/lang/zh_CN.lang"));
+		loadLocalizations("en_US",
+				I18NHelper.class.getResourceAsStream("/assets/lang/en_US.lang"));
 	}
 
 	public static void overrideLocalLanguage(String lang) {

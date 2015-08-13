@@ -1,7 +1,5 @@
 package com.std4453.freemclauncher.gui;
 
-import java.io.File;
-
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -16,9 +14,7 @@ public class GuiManager {
 		} catch (ClassNotFoundException | InstantiationException
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			throw new RuntimeException(e);
-		}
-
-		I18NHelper.loadDefaultLocalizations(new File("lang/"));
+		}	
 
 		mainWindow = new MainWindow(null);
 		mainWindow.initialize();

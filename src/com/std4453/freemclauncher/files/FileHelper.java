@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -160,5 +161,17 @@ public class FileHelper {
 						}
 				}
 			}));
+	}
+
+	public static String toString(InputStream is) {
+		StringBuilder sb = new StringBuilder();
+		Scanner scanner = new Scanner(is);
+		while (scanner.hasNextLine()) {
+			sb.append(scanner.nextLine());
+			sb.append('\n');
+		}
+		scanner.close();
+
+		return sb.toString();
 	}
 }

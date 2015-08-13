@@ -204,6 +204,7 @@ public class PanelStartGame extends JPanel {
 				GuiManager.mainWindow.getLblNewLabel().setText(
 						"Launching profile " + profile.getName() + "...");
 				GuiManager.mainWindow.getProgressBar().setValue(0);
+				
 				Launcher launcher = new Launcher();
 				try {
 					launcher.launchNoCheck(profile,

@@ -4,6 +4,7 @@ general.none=无
 general.unknown=未知
 general.downloaded=已下载
 general.notDownloaded=未下载
+general.unknownError=未知错误
 
 gui.tabs.selectProfile.name=选择游戏版本
 gui.tabs.downloadGameFiles.name=下载游戏文件
@@ -75,3 +76,26 @@ gui.dialog.userConfNameConflict.title=设置配置名称
 gui.dialog.userConfNameConflict.content=名称"%s"非法或者与其他名称冲突，请更换名称并重试。
 gui.dialog.delectConfConfirm.title=删除用户配置
 gui.dialog.delectConfConfirm.content=你真的要删除配置"%s"吗？一些游戏版本可能没有成就，统计等信息哦!
+
+auth.error.msg.unknownError=出错啦！！ 资源：%s 状态码：%d 错误类型：%s 错误信息：%s
+auth.error.error.methodNotAllowed=不允许的数据发送方式
+auth.error.msg.methodNotAllowed=不允许的数据发送方式：请使用POST方法发送数据.
+auth.error.error.resourceNotFound=请求的资源不存在
+auth.error.msg.resourceNotFound=请求的的资源"%s"找不到啦！是不是断网啦？要不就是被麻将的人吃掉了啦~
+auth.error.error.invalid.migrated=用户名或密码错误
+auth.error.msg.invalid.migrated=您的账户是不是已经迁移啦？请使用注册邮箱作为用户名了啦~
+auth.error.error.invalid.invalid=用户名或密码错误
+auth.error.msg.invalid.invalid=是不是记错密码啦？再想想~
+auth.error.error.invalid.token=用户名或密码错误
+auth.error.msg.invalid.token=我也不知道发生了什么TAT，反正就是登陆不了啦~再试试说不定就好了啦~
+auth.error.error.alreadyAssigned=无法登陆
+auth.error.msg.alreadyAssigned=您的帐号已经在其他地方登陆过了呢~请不要重复登陆啊~
+auth.error.error.nullCredentials=没有登陆
+auth.error.msg.nullCredentials=你怎么没有登陆啊~没有登录的话是不能玩练级游戏的~
+auth.error.error.unsupportedMediaType=连接错误
+auth.error.msg.unsupportedMediaType=你怎么乱发数据啊~这种数据服务器不认呢~
+
+auth.error.error.noConnection=连接错误
+auth.error.msg.noConnection=服务器连接不上啊！！ 资源：%s
+auth.error.error.parseError=数据错误
+auth.error.msg.parseError=啊咧？服务器传回来了奇怪的数据~人家不认得啦OAO
