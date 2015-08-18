@@ -4,6 +4,7 @@ general.none=None
 general.unknown=Unknown
 general.downloaded=Downloaded
 general.notDownloaded=Not Downloaded
+general.unknownError=Unknown Error
 
 gui.tabs.selectProfile.name=Select Profile
 gui.tabs.downloadGameFiles.name=Download Game Files
@@ -67,3 +68,40 @@ gui.tabs.manageUsers.loginModeOffline=Offline
 gui.tabs.manageUsers.loginModeLegacy=Legacy
 gui.tabs.manageUsers.loginModeYggdrasil=Yggdrasil
 gui.tabs.manageUsers.loginModeNone=None
+
+gui.action.none=No action
+gui.action.scanningProfiles=Scanning for game profiles
+gui.action.launching=Launching profile "%s"
+gui.action.launch.getAuthenticator=Logging in
+gui.action.launch.checkLibraries=Loading libraries
+gui.action.launch.parseProfileJSON=Parsing JSON file
+gui.action.launch.extractNatives=Extracting natives
+gui.action.launch.launchGame=Launching game
+
+gui.dialog.userConfNameConflict.title=Set Configuration Name
+gui.dialog.userConfNameConflict.content=The name "%s" is illegal or conflicts with another one. Please change it and retry.
+gui.dialog.delectConfConfirm.title=Delete Configuration
+gui.dialog.delectConfConfirm.content=Are you sure to delete configuration "%s"? It will be lost forever!
+
+auth.error.msg.unknownError=Something went wrong! Resource:%s Status Code:%d Error Type:%s Error Message:%s
+auth.error.error.methodNotAllowed=Disallowed Data Transferring Method
+auth.error.msg.methodNotAllowed=The HTTP method you used is disallowed. Please use POST.
+auth.error.error.resourceNotFound=Requested Resource Unavailable
+auth.error.msg.resourceNotFound=The resource "%s" you have requested is unavailable, please check your network connection and retry.
+auth.error.error.invalid.migrated=Invalid Credential
+auth.error.msg.invalid.migrated=Your account might have migrated. Please use your register email address for the user name.
+auth.error.error.invalid.invalid=Invalid Credential
+auth.error.msg.invalid.invalid=Might you have got your password wrong? Please check your spelling! :D
+auth.error.error.invalid.token=Invalid Credential
+auth.error.msg.invalid.token=An unrecognized error occurred during the authentication. Please try again later. 
+auth.error.error.alreadyAssigned=Cannot Login
+auth.error.msg.alreadyAssigned=Your account has been logged in somewhere else. You can only log in on one device at the same time.
+auth.error.error.nullCredentials=Hasen't Logged In
+auth.error.msg.nullCredentials=Please log in your Mojang account to play Multiplayer games.
+auth.error.error.unsupportedMediaType=Connection Error
+auth.error.msg.unsupportedMediaType=Are you trying to hack something? Not by me! Please send an valid data.
+
+auth.error.error.noConnection=Connection Error
+auth.error.msg.noConnection=Can't connect to the server. Resource:%s
+auth.error.error.parseError=Wrong Data
+auth.error.msg.parseError=Something went wrong that the server returned unrecognized data. Please try again later.

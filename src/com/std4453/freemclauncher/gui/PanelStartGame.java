@@ -33,9 +33,11 @@ import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.gui.PanelManageUsers.UserConf;
 import com.std4453.freemclauncher.i18n.I18NHelper;
 import com.std4453.freemclauncher.launch.Launcher;
+import com.std4453.freemclauncher.launch.Launcher.LaunchStates;
 import com.std4453.freemclauncher.profiles.Profile;
 import com.std4453.freemclauncher.profiles.ProfileScanner;
 import com.std4453.freemclauncher.util.ArrayListModel;
+import com.std4453.freemclauncher.util.CallbackManager.Callback;
 import com.std4453.freemclauncher.util.StructuredDataArray;
 import com.std4453.freemclauncher.util.StructuredDataHelper;
 import com.std4453.freemclauncher.util.StructuredDataObject;
@@ -201,11 +203,28 @@ public class PanelStartGame extends JPanel {
 
 		new Thread(new Runnable() {
 			public void run() {
-				GuiManager.mainWindow.getLblNewLabel().setText(
-						"Launching profile " + profile.getName() + "...");
-				GuiManager.mainWindow.getProgressBar().setValue(0);
-				
+				GuiManager.mainWindow.pushAction(I18NHelper
+						.getFormattedLocalization("gui.action.launching",
+								profile.getName()));
+				GuiManager.mainWindow.setProgress(0);
+
 				Launcher launcher = new Launcher();
+				GuiManager.mainWindow.pushAction();
+				launcher.getCallbackManager().addCallBack(
+						new WeightBasedCallback<Launcher.LaunchStates>(100));
+				launcher.getCallbackManager().addCallBack(
+						new Callback<Launcher.LaunchStates>() {
+							@Override
+							public void execute(LaunchStates t) {
+								if (t != null)
+									GuiManager.mainWindow
+											.replaceAction(I18NHelper
+													.getFormattedLocalization(t
+															.getResName()));
+								else
+									GuiManager.mainWindow.clearAction();
+							}
+						});
 				try {
 					launcher.launchNoCheck(profile,
 							getAuth(getConfOfProfile(profile)));
@@ -282,12 +301,11 @@ public class PanelStartGame extends JPanel {
 
 	protected void loadProfiles() {
 		if (GuiManager.mainWindow != null
-				&& GuiManager.mainWindow.getLblNewLabel() != null)
-			GuiManager.mainWindow
-					.getLblNewLabel()
-					.setText(
-							I18NHelper
-									.getFormattedLocalization("gui.action.scanningProfiles"));
+				&& GuiManager.mainWindow.getLblNewLabel() != null) {
+			GuiManager.mainWindow.clearAction();
+			GuiManager.mainWindow.pushAction(I18NHelper
+					.getFormattedLocalization("gui.action.scanningProfiles"));
+		}
 		if (GuiManager.mainWindow != null
 				&& GuiManager.mainWindow.getProgressBar() != null)
 			GuiManager.mainWindow.getProgressBar().setValue(0);

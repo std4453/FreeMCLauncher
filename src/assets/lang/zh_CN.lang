@@ -1,3 +1,8 @@
+# DO NOT MODIFY THIS FILE AS IT IS CONSIDERED THE DEFAULT LANG FILE!
+# IT CONTAINER ALL THE LOCALIZATION ENTRIES AND VALUES IN CHINESE,
+# AND MODIFYING IT MAY CAUSE THE PROGRAM TO CRASH! SO DO NO
+# MODIFICATION UNLESS YOU KNOW WHAT YOU ARE DOING!
+
 general.installed=ÒÑ°²×°
 general.notInstalled=Î´°²×°
 general.none=ÎŞ
@@ -71,6 +76,12 @@ gui.tabs.manageUsers.loginModeNone=ÎŞ
 
 gui.action.none=ÎŞ¶¯×÷
 gui.action.scanningProfiles=ÕıÔÚÉ¨ÃèÓÎÏ·ÎÄ¼ş
+gui.action.launching=ÕıÔÚÆô¶¯ÓÎÏ·"%s"
+gui.action.launch.getAuthenticator=ÕıÔÚµÇÂ½
+gui.action.launch.checkLibraries=ÕıÔÚ¼ÓÔØ¿â
+gui.action.launch.parseProfileJSON=ÕıÔÚ½âÎöJSONÎÄ¼ş
+gui.action.launch.extractNatives=ÕıÔÚ½âÑ¹Ëõ±¾»ú¿âÎÄ¼ş
+gui.action.launch.launchGame=ÕıÔÚÆô¶¯ÓÎÏ·
 
 gui.dialog.userConfNameConflict.title=ÉèÖÃÅäÖÃÃû³Æ
 gui.dialog.userConfNameConflict.content=Ãû³Æ"%s"·Ç·¨»òÕßÓëÆäËûÃû³Æ³åÍ»£¬Çë¸ü»»Ãû³Æ²¢ÖØÊÔ¡£
@@ -91,7 +102,7 @@ auth.error.msg.invalid.token=ÎÒÒ²²»ÖªµÀ·¢ÉúÁËÊ²Ã´TAT£¬·´Õı¾ÍÊÇµÇÂ½²»ÁËÀ²~ÔÙÊÔÊÔË
 auth.error.error.alreadyAssigned=ÎŞ·¨µÇÂ½
 auth.error.msg.alreadyAssigned=ÄúµÄÕÊºÅÒÑ¾­ÔÚÆäËûµØ·½µÇÂ½¹ıÁËÄØ~Çë²»ÒªÖØ¸´µÇÂ½°¡~
 auth.error.error.nullCredentials=Ã»ÓĞµÇÂ½
-auth.error.msg.nullCredentials=ÄãÔõÃ´Ã»ÓĞµÇÂ½°¡~Ã»ÓĞµÇÂ¼µÄ»°ÊÇ²»ÄÜÍæÁ·¼¶ÓÎÏ·µÄ~
+auth.error.msg.nullCredentials=ÄãÔõÃ´Ã»ÓĞµÇÂ½°¡~Ã»ÓĞµÇÂ¼µÄ»°ÊÇ²»ÄÜÍæÁª»úÓÎÏ·µÄ~
 auth.error.error.unsupportedMediaType=Á¬½Ó´íÎó
 auth.error.msg.unsupportedMediaType=ÄãÔõÃ´ÂÒ·¢Êı¾İ°¡~ÕâÖÖÊı¾İ·şÎñÆ÷²»ÈÏÄØ~
 

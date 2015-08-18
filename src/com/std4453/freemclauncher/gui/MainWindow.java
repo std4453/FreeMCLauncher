@@ -3,6 +3,7 @@ package com.std4453.freemclauncher.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -61,7 +62,8 @@ public class MainWindow {
 	 * parameter, but this is only for the purpose to separate the two
 	 * constructor and is never used, as WindowBuilder required the first one.<br>
 	 * To avoid this kind of problems mentioned before, The whole construction
-	 * should look like this:<p>
+	 * should look like this:
+	 * <p>
 	 * <code>
 	 * MainWindow mainWindow=new MainWindow(null);<br>
 	 * mainWindow.initialize();
@@ -154,7 +156,62 @@ public class MainWindow {
 	}
 
 	public void clearAction() {
-		this.lblNewLabel.setText(I18NHelper
-				.getFormattedLocalization("gui.action.none"));
+		actionStrings.clear();
+
+		refreshAction();
+	}
+
+	protected void refreshAction() {
+		if (actionStrings.size() == 0) {
+			this.lblNewLabel.setText(I18NHelper
+					.getFormattedLocalization("general.none"));
+			return;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (String action : actionStrings) {
+			sb.append(action);
+			if (action != actionStrings.get(actionStrings.size() - 1))
+				sb.append(" - ");
+		}
+
+		this.lblNewLabel.setText(sb.toString());
+	}
+
+	protected Stack<String> actionStrings = new Stack<String>();
+
+	public void pushAction(String str) {
+		actionStrings.push(str == null ? I18NHelper
+				.getFormattedLocalization("general.none") : str);
+
+		refreshAction();
+	}
+
+	public void pushAction() {
+		pushAction(null);
+
+		refreshAction();
+	}
+
+	public void popAction() {
+		if (actionStrings.size() > 0)
+			actionStrings.pop();
+
+		refreshAction();
+	}
+
+	public void replaceAction(String str) {
+		if (actionStrings.size() > 0)
+			actionStrings.set(actionStrings.size() - 1, str);
+
+		refreshAction();
+	}
+
+	public void setProgress(int progress) {
+		this.progressBar.setValue(progress);
+	}
+
+	public int getProgress() {
+		return this.progressBar.getValue();
 	}
 }

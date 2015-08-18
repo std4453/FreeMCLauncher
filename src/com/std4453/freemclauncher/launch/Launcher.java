@@ -15,18 +15,63 @@ import com.std4453.freemclauncher.files.DirectoryHelper;
 import com.std4453.freemclauncher.files.FileHelper;
 import com.std4453.freemclauncher.profiles.Profile;
 import com.std4453.freemclauncher.profiles.ProfileScanner;
+import com.std4453.freemclauncher.util.CallbackManager;
 import com.std4453.freemclauncher.util.StringParamReplacer;
 import com.std4453.freemclauncher.util.StructuredDataHelper;
 import com.std4453.freemclauncher.util.StructuredDataObject;
+import com.std4453.freemclauncher.util.WeighableEnum;
 
 public class Launcher {
+	public static enum LaunchStates implements WeighableEnum {
+		STATE_GET_AUTHENTICATOR("gui.action.launch.getAuthenticator", 2), STATE_CHECK_LIBRARIES(
+				"gui.action.launch.checkLibraries", 1), STATE_PARSE_PROFILE_JSON(
+				"gui.action.launch.parseProfileJSON", 1), STATE_EXTRACT_NATIVES(
+				"gui.action.launch.extractNatives", 2), STATE_LAUNCH_GAME(
+				"gui.action.launch.launchGame", 3);
+
+		protected final String resName;
+		protected final int weight;
+
+		private LaunchStates(String resName, int weight) {
+			this.resName = resName;
+			this.weight = weight;
+		}
+
+		public String getResName() {
+			return resName;
+		}
+
+		public int getWeight() {
+			return weight;
+		}
+
+		@Override
+		public int getTotal() {
+			int total = 0;
+
+			for (LaunchStates state : LaunchStates.values())
+				total += state.getWeight();
+
+			return total;
+		}
+	}
+
+	protected CallbackManager<LaunchStates> callbackManager;
+
+	public CallbackManager<LaunchStates> getCallbackManager() {
+		return callbackManager;
+	}
+
 	public Launcher() {
+		this.callbackManager = new CallbackManager<>();
 	}
 
 	public void launchNoCheck(Profile profile) throws IOException,
 			InterruptedException {
-		launchNoCheck(profile,
-				AuthenticatorFactory.getAuthenticatorForVersion(profile));
+		callbackManager.broadcast(LaunchStates.STATE_GET_AUTHENTICATOR);
+		IAuthenticator auth = AuthenticatorFactory
+				.getAuthenticatorForVersion(profile);
+		launchNoCheck(profile, auth);
 	}
 
 	public void launchNoCheck(Profile profile, IAuthenticator auth)
@@ -34,8 +79,10 @@ public class Launcher {
 		if (profile == null)
 			return;
 
+		callbackManager.broadcast(LaunchStates.STATE_CHECK_LIBRARIES);
 		profile.checkLibraryAvailability();
 
+		callbackManager.broadcast(LaunchStates.STATE_PARSE_PROFILE_JSON);
 		File jsonFile = new File(DirectoryHelper.versions, String.format(
 				"%s/%s.json", profile.getName(), profile.getName()));
 		if (!jsonFile.exists())
@@ -87,9 +134,11 @@ public class Launcher {
 		// TODO:calculate memory
 		String memory = "512M";
 
+		callbackManager.broadcast(LaunchStates.STATE_EXTRACT_NATIVES);
 		NativesExtracter extracter = new NativesExtracter();
 		String nativesDir = extracter.extractNativesForProfile(profile);
 
+		callbackManager.broadcast(LaunchStates.STATE_LAUNCH_GAME);
 		Process process = new ProcessBuilder("cmd", "/c", String.format(
 				"javaw -Djava.library.path=%s -Xms%s -cp %s %s %s", nativesDir,
 				memory, cp, mainClass, args)).redirectErrorStream(true).start();
@@ -102,6 +151,8 @@ public class Launcher {
 		process.destroy();
 
 		FileHelper.deleteOnExit(new File(nativesDir));
+
+		callbackManager.finish();
 	}
 
 	public static void main(String[] args) throws IOException,

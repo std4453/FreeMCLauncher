@@ -127,7 +127,12 @@ public class I18NHelper {
 	}
 
 	public static void loadDefaultLocalizations(File langFiles) {
-		if (!loadDefaultLocalizations(getDefaultLang(), langFiles)) {
+		String lang = getDefaultLang();
+		if (lang.equals("zh_CN") || lang.equals("en_US"))
+			return;
+		if (!loadDefaultLocalizations(lang, langFiles)) {
+			log(WARNING, "Unable to load localization files for lang\"" + lang
+					+ "\"");
 			overrideLocalLanguage("zh_CN");
 		}
 	}
