@@ -114,8 +114,9 @@ public class Logger {
 	private static StringBuilder appendPrefix(StringBuilder builder,
 			String prefix) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		return builder.append(String.format("[%s][%s] ",
-				format.format(new Date()), prefix));
+		return builder.append(String.format("%s [%s][%s] ",
+				format.format(new Date()), Thread.currentThread().getName(),
+				prefix));
 	}
 
 	private static final class StackTraceOutputStream extends OutputStream {
